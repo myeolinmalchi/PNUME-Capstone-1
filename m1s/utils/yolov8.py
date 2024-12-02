@@ -165,7 +165,6 @@ class YOLOv8:
         center_pos = (x + (w / 2), y + (h / 2))
         cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), thickness=3)
         cv2.putText(image, "face:"+str(round(score,2)), (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), thickness=2)
-        cv2.circle(image, (center_pos[0], center_pos[1]), 4, (0, 255, 0), thickness=-1)
         return image, center_pos[0], center_pos[1]
     
     def draw_detections(self, image, boxes, scores, kpts):
