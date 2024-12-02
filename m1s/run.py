@@ -9,7 +9,7 @@ MODEL_PATH = './models/yolov8n-face.rknn'
 CAM_WIDTH = 640
 CAM_HEIGHT = 640
 
-SERIAL_PORT = 'COM3'
+SERIAL_PORT = '/dev/ttyACM0'
 SERIAL_BAUDRATE = 9600
 
 
@@ -32,7 +32,7 @@ if __name__ == '__main__':
             continue
 
         arduino.write(f"{pos[0]},{pos[1]}\n".encode())
-        cv2.imshow('Webcam', result_img)
+        #cv2.imshow('Webcam', result_img)
 
     # release
     model.release()
