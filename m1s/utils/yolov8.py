@@ -65,7 +65,8 @@ class YOLOv8:
         scale_h, scale_w = srcimg.shape[0]/newh, srcimg.shape[1]/neww
         #input_img = input_img.astype(np.float32) / 255.0
 
-        outputs = self.model.run([srcimg])
+        input_img = np.expand_dims(input_img, 0)
+        outputs = self.model.run([input_img])
         # if isinstance(outputs, tuple):
         #     outputs = list(outputs)
         # if float(cv2.__version__[:3])>=4.7:
@@ -140,6 +141,14 @@ class YOLOv8:
             x2 = np.clip(x2, 0, max_shape[1])
             y2 = np.clip(y2, 0, max_shape[0])
         return np.stack([x1, y1, x2, y2], axis=-1)
+
+    def draw_detection(self, image, box, score, kp):
+        x, y, w, h = box.astype(int)
+        cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), thickness=3)
+        cv2.putText(image, "face:"+str(round(score,2)), (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), thickness=2)
+        for i in range(5):
+            cv2.circle(image, (int(kp[i * 3]), int(kp[i * 3 + 1])), 4, (0, 255, 0), thickness=-1)
+        return image
     
     def draw_detections(self, image, boxes, scores, kpts):
         for box, score, kp in zip(boxes, scores, kpts):
