@@ -71,10 +71,13 @@ class YOLOv8:
             if size > max_size:
                 max_size = size
                 idx = i
+        if idx == -1:
+            return img, None
+
         dstimg, center_x, center_y = self.draw_detection(img, boxes[idx], scores[idx])
         ed = time()
         print(f"detect largest face: {ed - st:.4f}sec")
-        return dstimg, center_x, center_y
+        return dstimg, (center_x, center_y)
 
     def detect(self, srcimg):
         input_img, newh, neww, padh, padw = self.resize_image(cv2.cvtColor(srcimg, cv2.COLOR_BGR2RGB))

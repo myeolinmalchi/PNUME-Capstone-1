@@ -27,8 +27,11 @@ if __name__ == '__main__':
         if not status:
             break
 
-        result_img, x, y = yolov8.detect_largest_face(frame)
-        arduino.write(f"{x},{y}\n".encode())
+        result_img, pos = yolov8.detect_largest_face(frame)
+        if pos is None:
+            continue
+
+        arduino.write(f"{pos[0]},{pos[1]}\n".encode())
         cv2.imshow('Webcam', result_img)
 
     # release
