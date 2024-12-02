@@ -12,16 +12,23 @@ if __name__ == '__main__':
     yolov8 = YOLOv8(model)
     capture = setup_camera(CAM_WIDTH, CAM_HEIGHT)
 
-    while capture.isOpened():
+    while cv2.waitKey(1) < 0:
         status, frame = capture.read()
         
         if not status:
             break
 
         boxes, scores, classids, kpts = yolov8.detect(frame)
-        dstimg = yolov8.draw_detections(frame, boxes, scores, kpts)
-
-        cv2.imshow('Webcam', frame)
+        idx = -1
+        max_size = 0
+        for i, box in enumerate(boxes):
+            x, y, w, h = box
+            size = w * h
+            if size > max_size:
+                max_size = size
+                idx = i
+        dstimg = yolov8.draw_detection(frame, boxes[idx], scores[idx], kpts[idx])
+        cv2.imshow('Webcam', dstimg)
         
 
     # release
