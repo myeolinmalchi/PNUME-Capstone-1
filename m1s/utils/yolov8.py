@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import cv2
+from time import time
 
 from utils.wrappers import ModelWrapper
 
@@ -61,6 +62,7 @@ class YOLOv8:
         return img, newh, neww, top, left
 
     def detect_largest_face(self, img):
+        st = time()
         boxes, scores, _ = self.detect(img)
         idx, max_size = -1, 0
         for i, box in enumerate(boxes):
@@ -70,6 +72,8 @@ class YOLOv8:
                 max_size = size
                 idx = i
         dstimg, center_x, center_y = self.draw_detection(img, boxes[idx], scores[idx])
+        ed = time()
+        print(f"detect largest face: {ed - st:.4f}sec")
         return dstimg, center_x, center_y
 
     def detect(self, srcimg):
