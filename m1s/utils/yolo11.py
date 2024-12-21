@@ -140,8 +140,29 @@ class YOLO11:
 
         return boxes, classes, scores
 
+    def resize_image(self, srcimg, keep_ratio=True):
+        neww, newh = self.img_size
+        if keep_ratio and srcimg.shape[0] != srcimg.shape[1]:
+            hw_scale = srcimg.shape[0] / srcimg.shape[1]
+            if hw_scale > 1:
+                newh, neww = self.img_size[1], int(self.img_size[0] / hw_scale)
+                img = cv2.resize(srcimg, (neww, newh), interpolation=cv2.INTER_AREA)
+                left = int((self.img_size[0] - neww) * 0.5)
+                img = cv2.copyMakeBorder(img, 0, 0, left, self.img_size[1] - neww - left, cv2.BORDER_CONSTANT,
+                                         value=(0, 0, 0))  # add border
+            else:
+                newh, neww = int(self.img_size[1] * hw_scale), self.img_size[0]
+                img = cv2.resize(srcimg, (neww, newh), interpolation=cv2.INTER_AREA)
+                top = int((self.img_size[1] - newh) * 0.5)
+                img = cv2.copyMakeBorder(img, top, self.img_size[1] - newh - top, 0, 0, cv2.BORDER_CONSTANT,
+                                         value=(0, 0, 0))
+        else:
+            img = cv2.resize(srcimg, (self.img_size[0], self.img_size[1]), interpolation=cv2.INTER_AREA)
+        return img, newh, neww
+
     def detect_largest_object(self, input):
-        outputs = self.model.run(input)
+        img, _, _ = self.resize_image(input)
+        outputs = self.model.run(img)
         boxes, _, scores = self.post_process(outputs)
 
         if boxes is None or scores is None:
@@ -163,9 +184,9 @@ class YOLO11:
         
 
     def draw(self, image, box, score):
-        x, y, w, h = box.astype(int)
-        center_pos = (x + (w / 2), y + (h / 2))
-        cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), thickness=3)
-        cv2.putText(image, "face:"+str(round(score,2)), (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), thickness=2)
+        x1, y1, x2, y2 = box.astype(int)
+        center_pos = ((x1 + x2) / 2, (y1 + y2) / 2)
+        cv2.rectangle(image, (x1, y2), (x2, y2), (0, 0, 255), thickness=3)
+        cv2.putText(image, "face:"+str(round(score,2)), (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), thickness=2)
         return image, center_pos[0], center_pos[1]
 
