@@ -1,0 +1,23 @@
+# rknn-toolkit2/rknn-toolkit2/packages/x86_64/requirements_cp132-2.3.0.txt
+
+# base deps
+protobuf>=4.21.6,<=4.25.4
+
+# utils
+psutil>=5.9.0
+ruamel.yaml>=0.17.21
+scipy>=1.9.3
+tqdm>=4.64.1
+opencv-python>=4.5.5.64
+fast-histogram>=0.11
+numpy<=1.26.4
+
+rknn-toolkit2>=2.3.0
+
+# base
+onnx>=1.10.0
+onnxruntime>=1.17.0
+torch>=1.10.1,<=2.4.0
+# tensorflow<=2.16.0rc0
+
+./packages/ultralytics-8.3.9-py3-none-any.whl
