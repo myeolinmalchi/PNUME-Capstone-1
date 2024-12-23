@@ -141,7 +141,7 @@ def post_process(input_data):
 def draw(image, box, score):
     x1, y1, x2, y2 = box.astype(int)
     center_pos = ((x1 + x2) / 2, (y1 + y2) / 2)
-    cv2.rectangle(image, (x1, y2), (x2, y2), (0, 0, 255), thickness=3)
+    cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 255), thickness=3)
     cv2.putText(image, "face:"+str(round(score,2)), (x1, y1 - 5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), thickness=2)
     return image, center_pos[0], center_pos[1]
 
@@ -165,7 +165,7 @@ def func(rknn: ModelWrapper, IMG: MatLike):
             idx = i
 
     if idx == -1:
-        return input, None
+        return img, None
 
-    dstimg, center_x, center_y = draw(input, boxes[idx], scores[idx])
+    dstimg, center_x, center_y = draw(img, boxes[idx], scores[idx])
     return dstimg, (center_x, center_y)
