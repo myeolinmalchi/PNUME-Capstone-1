@@ -166,7 +166,7 @@ class YOLO11:
         boxes, _, scores = self.post_process(outputs)
 
         if boxes is None or scores is None:
-            return
+            return img, None
 
         idx, max_size = -1, 0
         for i, box in enumerate(boxes):
@@ -177,9 +177,9 @@ class YOLO11:
                 idx = i
 
         if idx == -1:
-            return input, None
+            return img, None
 
-        dstimg, center_x, center_y = self.draw(input, boxes[idx], scores[idx])
+        dstimg, center_x, center_y = self.draw(img, boxes[idx], scores[idx])
         return dstimg, (center_x, center_y)
         
 
