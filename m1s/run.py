@@ -9,7 +9,7 @@ from func import func
 import serial
 import cv2
 
-MODEL_PATH = './models/yolov8n-face.rknn'
+MODEL_PATH = './models/yolo11n.rknn'
 CAM_WIDTH = 640
 CAM_HEIGHT = 640
 
@@ -70,12 +70,11 @@ if __name__ == '__main__':
             break
         pool.put(frame)
         frame, _ = pool.get()
-
+        if frame is None:
+            break
+        cv2.imshow('rknn', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
-        cv2.imshow('rknn', frame)
-
         if frames % 30 == 0:
             print(f"{30 / (time() - loop_time)} FPS")
             loop_time = time()
