@@ -1,6 +1,6 @@
 from time import time
-from m1s.rknn import RKNNPoolExecutor
-from m1s.utils.yolo11 import YOLO11
+from rknn import RKNNPoolExecutor
+from utils.yolo11 import YOLO11
 from utils.yolov8 import YOLOv8
 from utils.wrappers import ModelWrapper
 from utils.camera import setup_camera
@@ -69,10 +69,12 @@ if __name__ == '__main__':
         if not ret:
             break
         pool.put(frame)
-        frame = pool.get()
+        frame, _ = pool.get()
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
+        cv2.imshow('rknn', frame)
 
         if frames % 30 == 0:
             print(f"{30 / (time() - loop_time)} FPS")

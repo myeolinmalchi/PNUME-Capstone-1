@@ -1,4 +1,4 @@
-from m1s.utils.wrappers import ModelWrapper
+from utils.wrappers import ModelWrapper
 import numpy as np
 import cv2
 

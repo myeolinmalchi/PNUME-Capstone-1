@@ -1,5 +1,5 @@
 from cv2.typing import MatLike
-from m1s.utils.wrappers import ModelWrapper
+from utils.wrappers import ModelWrapper
 import numpy as np
 import cv2
 
